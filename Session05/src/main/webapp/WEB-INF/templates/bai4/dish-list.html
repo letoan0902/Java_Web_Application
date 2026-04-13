@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="vi"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/main-layout}">
+<head>
+    <title>Danh sách thực đơn</title>
+    <style>
+        table { border-collapse: collapse; width: 80%; }
+        th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; }
+        th { background-color: #f0f0f0; }
+        .het-hang { color: red; font-weight: bold; }
+        .con-hang { color: green; }
+        a.btn-detail { text-decoration: none; color: #2196F3; }
+        a.btn-detail:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <main layout:fragment="content">
+        <h1>Thực đơn nhà hàng</h1>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tên món</th>
+                    <th>Giá (VNĐ)</th>
+                    <th>Trạng thái</th>
+                    <th>Chi tiết</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="dish : ${dishList}">
+                    <td th:text="${dish.id}">1</td>
+                    <td th:text="${dish.name}">Cá hồi nướng</td>
+                    <td th:text="${#numbers.formatDecimal(dish.price, 0, 'COMMA', 0, 'POINT')}">150.000</td>
+                    <td>
+                        <span th:if="${dish.available}" class="con-hang">Còn hàng</span>
+                        <span th:unless="${dish.available}" class="het-hang">Hết hàng</span>
+                    </td>
+                    <td>
+                        <a class="btn-detail" th:href="@{|/bai4/dish/${dish.id}|}">Xem chi tiết</a>
+                    </td>
+                </tr>
+                <!-- Dữ liệu mẫu (Natural Templating) -->
+                <tr th:remove="all">
+                    <td>99</td>
+                    <td>Món mẫu tĩnh</td>
+                    <td>100.000</td>
+                    <td><span class="con-hang">Còn hàng</span></td>
+                    <td><a href="#">Xem chi tiết</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bài 3 – Quản lý thực đơn</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        table { border-collapse: collapse; width: 80%; }
+        th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; }
+        th { background-color: #f0f0f0; }
+        .het-hang { color: red; font-weight: bold; }
+        .con-hang { color: green; }
+        .empty-msg { color: #888; font-style: italic; margin: 20px 0; }
+        .error-msg { color: red; background: #ffe0e0; padding: 10px; border-radius: 4px; margin-bottom: 10px; }
+        .success-msg { color: green; background: #e0ffe0; padding: 10px; border-radius: 4px; margin-bottom: 10px; }
+        a.btn-edit { text-decoration: none; background: #2196F3; color: #fff; padding: 4px 10px; border-radius: 3px; }
+        a.btn-edit:hover { background: #1976D2; }
+    </style>
+</head>
+<body>
+    <h1>Quản lý thực đơn (Admin)</h1>
+
+    <!-- Thông báo lỗi từ Flash Attribute (khi ID không tồn tại) -->
+    <div th:if="${errorMessage}" class="error-msg" th:text="${errorMessage}">
+        Thông báo lỗi mẫu
+    </div>
+
+    <!-- Thông báo thành công (khi cập nhật xong) -->
+    <div th:if="${successMessage}" class="success-msg" th:text="${successMessage}">
+        Cập nhật thành công!
+    </div>
+
+    <!-- Kịch bản: danh sách rỗng -->
+    <p th:if="${#lists.isEmpty(dishList)}" class="empty-msg">
+        Hiện tại nhà hàng đang cập nhật thực đơn, vui lòng quay lại sau.
+    </p>
+
+    <!-- Bảng danh sách -->
+    <table th:if="${not #lists.isEmpty(dishList)}">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tên món</th>
+                <th>Giá (VNĐ)</th>
+                <th>Trạng thái</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="dish : ${dishList}">
+                <td th:text="${dish.id}">1</td>
+                <td th:text="${dish.name}">Tên món mẫu</td>
+                <td th:text="${#numbers.formatDecimal(dish.price, 0, 'COMMA', 0, 'POINT')}">100.000</td>
+                <td>
+                    <span th:if="${dish.available}" class="con-hang">Còn hàng</span>
+                    <span th:unless="${dish.available}" class="het-hang">Hết hàng</span>
+                </td>
+                <td>
+                    <a class="btn-edit" th:href="@{|/bai3/edit/${dish.id}|}">Chỉnh sửa</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

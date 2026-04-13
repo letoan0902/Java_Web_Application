@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="vi"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/main-layout}">
+<head>
+    <title>Chi tiết món ăn</title>
+    <style>
+        .dish-card { border: 1px solid #ddd; border-radius: 8px; padding: 20px; max-width: 500px; }
+        .dish-card h2 { margin-bottom: 10px; }
+        .dish-card p { margin: 6px 0; }
+        .het-hang { color: red; font-weight: bold; }
+        .con-hang { color: green; font-weight: bold; }
+        a.btn-back { display: inline-block; margin-top: 16px; color: #2196F3; text-decoration: none; }
+        a.btn-back:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <main layout:fragment="content">
+        <div class="dish-card" th:object="${dish}">
+            <h2 th:text="*{name}">Cá hồi nướng</h2>
+            <p>Mã món: <strong th:text="*{id}">1</strong></p>
+            <p>Giá: <strong th:text="${#numbers.formatDecimal(dish.price, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'">150.000 VNĐ</strong></p>
+            <p>
+                Trạng thái:
+                <span th:if="*{available}" class="con-hang">Còn hàng</span>
+                <span th:unless="*{available}" class="het-hang">Hết hàng</span>
+            </p>
+        </div>
+        <a class="btn-back" th:href="@{/bai4/dishes}">← Quay lại danh sách</a>
+    </main>
+</body>
+</html>

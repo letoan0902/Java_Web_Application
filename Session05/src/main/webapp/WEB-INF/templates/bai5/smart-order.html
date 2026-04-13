@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="vi"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/main-layout}">
+<head>
+    <title>Đặt món nhanh – Smart Order</title>
+    <style>
+        .order-card { border: 1px solid #ddd; border-radius: 8px; padding: 20px; max-width: 600px; }
+        .order-card h2 { margin-bottom: 12px; color: #333; }
+        table { border-collapse: collapse; width: 100%; margin: 12px 0; }
+        th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; }
+        th { background: #f9f9f9; }
+        .total-row { font-weight: bold; font-size: 18px; color: #E65100; }
+        .info { color: #666; margin-bottom: 8px; }
+    </style>
+</head>
+<body>
+    <main layout:fragment="content">
+        <h1>🛒 Đặt món nhanh (Smart Order)</h1>
+
+        <div class="order-card" th:object="${order}">
+            <h2>Đơn hàng #<span th:text="*{id}">1</span></h2>
+            <p class="info">Khách hàng: <strong th:text="*{customerName}">Khách mẫu</strong></p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tên món</th>
+                        <th>Đơn giá (VNĐ)</th>
+                        <th>Số lượng</th>
+                        <th>Thành tiền (VNĐ)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Dữ liệu thật từ server (th:each ghi đè dòng này) -->
+                    <tr th:each="item : *{items}">
+                        <td th:text="${item.dishName}">Tên món mẫu</td>
+                        <td th:text="${#numbers.formatDecimal(item.unitPrice, 0, 'COMMA', 0, 'POINT')}">150.000</td>
+                        <td th:text="${item.quantity}">1</td>
+                        <td th:text="${#numbers.formatDecimal(item.unitPrice * item.quantity, 0, 'COMMA', 0, 'POINT')}">150.000</td>
+                    </tr>
+                    <!-- Mock data: hiển thị khi Designer mở file tĩnh bằng browser -->
+                    <tr th:remove="all">
+                        <td>Cá hồi nướng</td>
+                        <td>150.000</td>
+                        <td>1</td>
+                        <td>150.000</td>
+                    </tr>
+                    <tr th:remove="all">
+                        <td>Salad rau trộn</td>
+                        <td>60.000</td>
+                        <td>2</td>
+                        <td>120.000</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Tổng tiền: tính toán ở Service, View chỉ hiển thị (Dumb View) -->
+            <p class="total-row">
+                Tổng cộng: <span th:text="${#numbers.formatDecimal(order.total, 0, 'COMMA', 0, 'POINT')}">270.000</span> VNĐ
+            </p>
+        </div>
+    </main>
+</body>
+</html>
